@@ -1,3 +1,5 @@
+#include <Stepper.h>
+
 #define dirPin 6
 #define stepPin 7
 
@@ -6,13 +8,70 @@
 #define In2Pin 26
 #define In1Pin 27
 
-int asdf = 0;
+const int SPU = 2048;
+Stepper Motor(SPU, In4Pin, In2Pin, In3Pin, In1Pin);
+
+class Car {
+  public:
+
+    int speed;
+    int dir;
+
+    Car () {
+      speed = 0;
+      dir = 0;
+    };
+
+    void calcDir (int angle) {
+      dir = angle;
+      digitalWrite(dirPin, dir >= 0 && dir <= 180 ? HIGH : LOW);
+    };
+
+    void setSpeed (int strength) {
+      int speedTemp = speed;
+
+      if (strength >= 95) {
+        speed = 12;
+      } else if (strength < 95 && strength >= 50) {
+        speed = 20;
+      } else if (strength < 50 && strength > 0) {
+        speed = 30;
+      } else if (strength < 1) {
+        speed = 0;
+      }
+
+      if (speedTemp != speed) {
+        Serial.println("Car: Setting speed from " + String(speedTemp) + " to " + String(speed));
+      }
+    };
+
+    void steering () {
+
+    };
+
+    void drive () {
+      if (speed < 1) {
+        return;
+      }
+
+      for (int i = 0; i < 2; i++) {
+        digitalWrite(stepPin, HIGH);
+        delayMicroseconds(speed * 5);
+        digitalWrite(stepPin, LOW);
+        delayMicroseconds(speed * 5);
+      }
+    };
+};
+
+Car car;
 
 void setup() {
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   
   Serial.begin(9600);
+
+  Motor.setSpeed(15);
 }
 
 void loop() {
@@ -25,55 +84,17 @@ void loop() {
       String strength = value.substring(3, 6);
       String button = value.substring(6, 8);
 
-      Serial.println(strength);
-
-      // Serial.print("angle: ");Serial.print(angle);Serial.print('\t');
-      // Serial.print("strength: ");Serial.print(strength);Serial.print('\t');
-      // Serial.print("button: ");Serial.print(button);Serial.println("");
-
       // winkel c:
-      int dir = angle.toInt();
-      if (dir >= 0 && dir <= 180) {
-        digitalWrite(dirPin, HIGH);
-      } else 
-        digitalWrite(dirPin, LOW);
-
-      if (strength.toInt() > 95) {
-        // Serial.println("1");
-        asdf = 10;
-      }
-
-      if (strength.toInt() < 96 && strength.toInt() > 50) {
-        // Serial.println("2");
-        asdf = 20;
-      }
-
-      if (strength.toInt() < 51) {
-        // Serial.println("3");
-        asdf = 30;
-      }
-
-      if (strength.toInt() < 1) {
-        // Serial.println("3");
-        asdf = 0;
-      }
+      car.calcDir(angle.toInt());
+      car.setSpeed(strength.toInt());
 
       Serial.flush();
       value="";
 
-      Serial.println("Speed: " + String(asdf));
+      // Serial.println("Speed: " + String(asdf));
       
     }
   }
-  
-  if (asdf > 0) {
-    //Serial.println("Setting speed");
-    // digitalWrite(dirPin, HIGH);
-    for (int i = 0; i < 2; i++) {
-      digitalWrite(stepPin, HIGH);
-      delayMicroseconds(asdf * 10);
-      digitalWrite(stepPin, LOW);
-      delayMicroseconds(asdf * 10);
-    }
-  }
+
+  car.drive();
 }
