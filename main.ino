@@ -7,8 +7,22 @@ void setup() {
 	pinMode(dirPin, OUTPUT);
 
 	Serial.begin(9600);
+	Motor.setCurrentPosition(0);
 }
 
+// void loop () {
+// 	Serial.println("Hallo");
+// 	Motor.moveTo(200);
+// 	delay(3000);
+// 	Motor.moveTo(0);
+// 	delay(3000);
+// 	Motor.moveTo(-200);
+// 	delay(3000);
+// 	Motor.moveTo(0);
+// 	delay(3000);
+// }
+
+int cangle;
 void loop() {
 	if (Serial.available() > 0) {
 		String value = Serial.readStringUntil('#');

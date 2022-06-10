@@ -25,9 +25,11 @@ class Car {
 		int angle = 0;
 
 		Car () {
-			Motor.setMaxSpeed(1000.0);
-			Motor.setAcceleration(100.0);
-			Motor.setSpeed(200);
+			Motor.setMaxSpeed(500.0);
+			Motor.setAcceleration(300.0);
+			Motor.setSpeed(300);
+
+			Motor.setCurrentPosition(0);
 		};
 
 		void calcDir(int a) {
@@ -66,17 +68,17 @@ class Car {
 				if (angle <= 120) {
 					if (tempAngle == 120) return;
 					tempAngle = 120;
-					Motor.move(100);
+					Motor.moveTo(100);
 				}
 				else if (angle <= 150) {
 					if (tempAngle == 150) return;
 					tempAngle = 150;
-					Motor.move(200);
+					Motor.moveTo(200);
 				}
 				else if (angle <= 180) {
 					if (tempAngle == 180) return;
 					tempAngle = 180;
-					Motor.move(300);
+					Motor.moveTo(300);
 				}
 			} else if (angle < 90) {
 				if (angle >= 60) {
