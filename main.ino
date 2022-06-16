@@ -3,6 +3,7 @@
 Car car;
 
 void setup() {
+	Serial.println("Car setup");
 	pinMode(stepPin, OUTPUT);
 	pinMode(dirPin, OUTPUT);
 
@@ -24,6 +25,7 @@ void setup() {
 
 int cangle;
 void loop() {
+
 	if (Serial.available() > 0) {
 		String value = Serial.readStringUntil('#');
 		// Serial.println(value);

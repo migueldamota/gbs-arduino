@@ -22,18 +22,14 @@ AccelStepper Motor(8, In1Pin, In3Pin, In2Pin, In4Pin);
 class Car {
    	public:
 		int speed = 0;
-		int angle = 0;
 
 		Car () {
-			Motor.setMaxSpeed(500.0);
+			Motor.setMaxSpeed(1000.0);
 			Motor.setAcceleration(300.0);
-			Motor.setSpeed(300);
-
-			Motor.setCurrentPosition(0);
+			Motor.setSpeed(500);
 		};
 
-		void calcDir(int a) {
-			angle = a;
+		void calcDir(int angle) {
 			digitalWrite(dirPin, angle >= 0 && angle <= 180 ? HIGH : LOW);
 		};
 
@@ -56,43 +52,43 @@ class Car {
 			}
 		};
 
-		int tempAngle = 0;
-
-		void steering(int carAngle) {
+		int tempAngle = -1;
+		void steering(int angle) {
 			//  300 left 	(angle = 180)
 			//    0 middle 	(angle = 90)
 			// -300 right 	(angle = 0)
 			Serial.println("tempAngle: " + String(tempAngle));
 
+
 			if (angle > 90) {
 				if (angle <= 120) {
 					if (tempAngle == 120) return;
 					tempAngle = 120;
-					Motor.moveTo(100);
+					Motor.move(150);
 				}
 				else if (angle <= 150) {
 					if (tempAngle == 150) return;
 					tempAngle = 150;
-					Motor.moveTo(200);
+					Motor.move(300);
 				}
 				else if (angle <= 180) {
 					if (tempAngle == 180) return;
 					tempAngle = 180;
-					Motor.moveTo(300);
+					Motor.move(450);
 				}
 			} else if (angle < 90) {
 				if (angle >= 60) {
 					if (tempAngle == 60) return;
 					tempAngle = 60;
-					Motor.moveTo(-100);
+					Motor.moveTo(-150);
 				} else if (angle >= 30) {
 					if (tempAngle == 30) return;
 					tempAngle = 30;
-					Motor.moveTo(-200);
+					Motor.moveTo(-300);
 				} else if (angle >= 0) {
 					if (tempAngle == 0) return;
 					tempAngle = 0;
-					Motor.moveTo(-300);
+					Motor.moveTo(-450);
 				}
 			} else {
 				tempAngle = -1;
