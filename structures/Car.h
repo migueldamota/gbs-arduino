@@ -12,7 +12,7 @@
 
 #define dirPin 6
 #define stepPin 7
-
+//Hallo Miguel
 // const int SPU = 2048;
 AccelStepper Motor(8, In1Pin, In3Pin, In2Pin, In4Pin);
 
@@ -24,9 +24,9 @@ class Car {
 		int speed = 0;
 
 		Car () {
-			Motor.setMaxSpeed(1000.0);
-			Motor.setAcceleration(300.0);
-			Motor.setSpeed(500);
+			Motor.setMaxSpeed(1500.0);
+			Motor.setAcceleration(400.0);
+			Motor.setSpeed(700);
 		};
 
 		void calcDir(int angle) {
@@ -76,7 +76,7 @@ class Car {
 					tempAngle = 180;
 					Motor.move(450);
 				}
-			} else if (angle < 90) {
+			} else if (angle < 90 && angle > 0) {
 				if (angle >= 60) {
 					if (tempAngle == 60) return;
 					tempAngle = 60;
@@ -91,6 +91,7 @@ class Car {
 					Motor.moveTo(-450);
 				}
 			} else {
+				Serial.println("Going back");
 				tempAngle = -1;
 				Motor.moveTo(0);
 			}
@@ -98,15 +99,17 @@ class Car {
 
 		void drive() {
   			Motor.run();
+
+			// Serial.println(speed);
 			if (speed < 1) {
 				return;
 			}
 
 			for (int i = 0; i < 2; i++) {
 				digitalWrite(stepPin, HIGH);
-				delayMicroseconds(speed * 5);
+				delayMicroseconds(speed * 10);
 				digitalWrite(stepPin, LOW);
-				delayMicroseconds(speed * 5);
+				delayMicroseconds(speed * 10);
 			}
 		};
 };

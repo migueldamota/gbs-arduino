@@ -11,19 +11,6 @@ void setup() {
 	Motor.setCurrentPosition(0);
 }
 
-// void loop () {
-// 	Serial.println("Hallo");
-// 	Motor.moveTo(200);
-// 	delay(3000);
-// 	Motor.moveTo(0);
-// 	delay(3000);
-// 	Motor.moveTo(-200);
-// 	delay(3000);
-// 	Motor.moveTo(0);
-// 	delay(3000);
-// }
-
-int cangle;
 void loop() {
 
 	if (Serial.available() > 0) {
@@ -43,6 +30,8 @@ void loop() {
 
 			Serial.flush();
 			value = "";
+		} else {
+			car.setSpeed(0);
 		}
 	}
 
