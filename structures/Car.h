@@ -25,8 +25,8 @@ class Car {
 
 		Car () {
 			Motor.setMaxSpeed(1500.0);
-			Motor.setAcceleration(400.0);
-			Motor.setSpeed(700);
+			Motor.setAcceleration(500.0);
+			Motor.setSpeed(800);
 		};
 
 		void calcDir(int angle) {
@@ -54,44 +54,97 @@ class Car {
 
 		int tempAngle = -1;
 		void steering(int angle) {
-			//  300 left 	(angle = 180)
-			//    0 middle 	(angle = 90)
-			// -300 right 	(angle = 0)
-			Serial.println("tempAngle: " + String(tempAngle));
+
+			// DEBUGGING
+			// Serial.println("tempAngle: " + String(tempAngle));
 
 
-			if (angle > 90) {
-				if (angle <= 120) {
-					if (tempAngle == 120) return;
-					tempAngle = 120;
-					Motor.move(150);
+			if (angle <= 180 && angle > 0) {
+				// LEFT
+				if (angle > 90) {
+					if (angle <= 120) {
+						if (tempAngle == 120) return;
+						tempAngle = 120;
+						Motor.moveTo(150);
+					}
+					else if (angle <= 150) {
+						if (tempAngle == 150) return;
+						tempAngle = 150;
+						Motor.moveTo(300);
+					}
+					else {
+						if (tempAngle == 180) return;
+						tempAngle = 180;
+						Motor.moveTo(450);
+					}
 				}
-				else if (angle <= 150) {
-					if (tempAngle == 150) return;
-					tempAngle = 150;
-					Motor.move(300);
+
+				// RIGHT
+				else if (angle < 90) {
+					if (angle >= 60) {
+						if (tempAngle == 60) return;
+						tempAngle = 60;
+						Motor.moveTo(-150);
+					}
+					else if (angle >= 30) {
+						if (tempAngle == 30) return;
+						tempAngle = 30;
+						Motor.moveTo(-300);
+					}
+					else {
+						if (tempAngle == 0) return;
+						tempAngle = 0;
+						Motor.moveTo(-450);
+					}
+				} else {
+					tempAngle = -1;
+					Motor.moveTo(0);
 				}
-				else if (angle <= 180) {
-					if (tempAngle == 180) return;
-					tempAngle = 180;
-					Motor.move(450);
+			}
+
+			// BACKWARD
+			else if (angle > 180) {
+				// LEFT
+				if (angle < 270) {
+					if (angle >= 240) {
+						if (tempAngle == 120) return;
+						tempAngle = 120;
+						Motor.moveTo(150);
+					}
+					else if (angle >= 210) {
+						if (tempAngle == 150) return;
+						tempAngle = 150;
+						Motor.moveTo(300);
+					}
+					else {
+						if (tempAngle == 180) return;
+						tempAngle = 180;
+						Motor.moveTo(450);
+					}
 				}
-			} else if (angle < 90 && angle > 0) {
-				if (angle >= 60) {
-					if (tempAngle == 60) return;
-					tempAngle = 60;
-					Motor.moveTo(-150);
-				} else if (angle >= 30) {
-					if (tempAngle == 30) return;
-					tempAngle = 30;
-					Motor.moveTo(-300);
-				} else if (angle >= 0) {
-					if (tempAngle == 0) return;
-					tempAngle = 0;
-					Motor.moveTo(-450);
+
+				// RIGHT
+				else if (angle > 270) {
+					if (angle <= 300) {
+						if (tempAngle == 60) return;
+						tempAngle = 60;
+						Motor.moveTo(-150);
+					}
+					else if (angle <= 330) {
+						if (tempAngle == 30) return;
+						tempAngle = 30;
+						Motor.moveTo(-300);
+					}
+					else {
+						if (tempAngle == 0) return;
+						tempAngle = 0;
+						Motor.moveTo(-450);
+					}
+				} else {
+					tempAngle = -1;
+					Motor.moveTo(0);
 				}
 			} else {
-				Serial.println("Going back");
 				tempAngle = -1;
 				Motor.moveTo(0);
 			}

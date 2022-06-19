@@ -12,10 +12,10 @@ void setup() {
 }
 
 void loop() {
-
 	if (Serial.available() > 0) {
 		String value = Serial.readStringUntil('#');
-		// Serial.println(value);
+		Serial.println(value);
+		Serial.println(String(value.length()));
 
 		if (value.length() == 7) {
 			String angle = value.substring(0, 3);
@@ -30,7 +30,7 @@ void loop() {
 
 			Serial.flush();
 			value = "";
-		} else {
+		} else if (car.speed > 0) {
 			car.setSpeed(0);
 		}
 	}
